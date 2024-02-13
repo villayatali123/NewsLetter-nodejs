@@ -1,5 +1,6 @@
 const { setupRabbitMQ } = require("../lib/rabbitMq");
 const exchangeName = "newsletter_exchange";
+const { sendEmail } = require("../lib/nodemailer");
 
 const consumeMessage = async () => {
   const channel = await setupRabbitMQ(exchangeName);

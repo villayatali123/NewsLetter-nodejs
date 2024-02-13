@@ -6,6 +6,6 @@ const {
     verifySubscriptionMail,
 } = require("../controllers/subscribe");
 
-router.route("/").post(verifySubscriptionMail);
+router.route("/subscriber").post(verifySubscriptionMail);
 
 module.exports = router;

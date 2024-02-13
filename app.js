@@ -1,8 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const cron = require("node-cron");
-const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -12,7 +10,7 @@ const connectDB = require("./db/connect");
 //router
 const subscribeRoute = require("./routes/subscribeRoute");
 
-app.use("/api/v1/subscriber", subscribeRoute);
+app.use("/api/v1", subscribeRoute);
 
 const port = process.env.PORT || 3000;
 

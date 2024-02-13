@@ -1,4 +1,4 @@
-const User = require("../models/Product");
+const User = require("../models/User");
 
 const verifySubscriptionMail = async (req, res) => {
   const email = req.query.email;

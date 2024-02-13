@@ -1,8 +1,10 @@
-const User = require("../models/Product");
+const User = require("../models/User");
 const { setupRabbitMQ } = require("../lib/rabbitMq");
 const { transporter } = require("../lib/nodemailer");
 const exchangeName = "newsletter_exchange";
+const cron = require('node-cron');
 
+console.log('this is trasnporter ===>',transporter);
 // # ┌────────────── second (optional)
 // # │ ┌──────────── minute
 // # │ │ ┌────────── hour
@@ -13,12 +15,14 @@ const exchangeName = "newsletter_exchange";
 // # │ │ │ │ │ │
 // # * * * * * *
 
-// Schedule cron job to send newsletter to subscribed users every week
+// Schedule cron job to send emails every week to let user subscribe to newsletter
+
 const scheduleCronJobSubscribe = async () => {
   try {
-    cron.schedule("0 0 * * 0", async () => {
-      const users = await User.find();
-
+    cron.schedule("*/1 * * * *", async () => {
+      // const users = await User.find();
+      const users = [{email:'villizain6@gmail.com'} , {email:'villayatali.18je0925@am.iitism.ac.in'}]
+      console.log("user info from subscribe fn ===>" , users);
       users.forEach(async (user) => {
         const mailOptions = {
           from: "villayat56@gmail.com",
@@ -37,15 +41,17 @@ const scheduleCronJobSubscribe = async () => {
   }
 };
 
-// Schedule cron job to send emails every week to let user subscribe to newsletter
+// Schedule cron job to send newsletter to subscribed users every week
 const scheduleCronJobNewsletter = async () => {
   try {
-    cron.schedule("0 0 * * 0", async () => {
-      const users = await User.find();
-
+    cron.schedule("*/2 * * * *", async () => {
+      // const users = await User.find();
+      const users = [{email:'villizain6@gmail.com'} , {email:'villayatali.18je0925@am.iitism.ac.in'}]
+      // console.log("user info ==>", users);
       const channel = await setupRabbitMQ(exchangeName);
 
       users.forEach(async (user) => {
+        console.log("user in newsletter ", user);
         // Publish email to RabbitMQ
         channel.publish(
           exchangeName,
@@ -58,26 +64,6 @@ const scheduleCronJobNewsletter = async () => {
   } catch (error) {
     console.log("error ===> ", error);
   }
-};
-
-const setupRabbitMQConsumer = async () => {
-  
-  const channel = await setupRabbitMQ(exchangeName);
-
-  const { queue } = await channel.assertQueue("", { exclusive: true });
-  await channel.bindQueue(queue, exchangeName, "");
-
-  console.log("Waiting for messages...");
-
-  channel.consume(queue, async (msg) => {
-    const userEmail = msg.content.toString();
-    console.log(`Received message for ${userEmail}`);
-
-    // Send email to user
-    await sendEmail(userEmail);
-
-    channel.ack(msg);
-  });
 };
 
 module.exports = {
