@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const { setupRabbitMQ } = require("../lib/rabbitMq");
-const { sendSubscribeEmail } = require("../lib/nodemailer");
+const { sendSubscribeEmail } = require("../jobs/email");
 const exchangeName = "newsletter_exchange";
 const cron = require("node-cron");
 

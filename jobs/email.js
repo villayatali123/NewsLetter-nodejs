@@ -1,10 +1,12 @@
+const { transporter } = require("../lib/nodemailer");
+
 const sendNewsLetterEmail = async (email) => {
-    console.log("im in sendEmail fn ===> ", email);
-    const mailOptions = {
-      from: "villayat56@gmail.com",
-      to: email,
-      subject: "Weekly Newsletter",
-      html: `
+//   console.log("im in sendNewsLetterEmail fn ===> ", email);
+  const mailOptions = {
+    from: process.env.gmail,
+    to: email,
+    subject: "Weekly Newsletter",
+    html: `
                 <h1>Welcome to Our Weekly Newsletter!</h1>
                 <p>Here are the latest updates from our company:</p>
                 <ul>
@@ -14,26 +16,25 @@ const sendNewsLetterEmail = async (email) => {
                 </ul>
                 <p>Stay tuned for more exciting news!</p>
             `,
-    };
-  
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${email}`);
   };
-  const sendSubscribeEmail = async (email) => {
-    console.log("im in sendEmail fn ===> ", email);
-    const mailOptions = {
-      from: "villayat56@gmail.com",
-      to: email,
-      subject: "Weekly Newsletter Subscription",
-      html: `<p>Subscribe to our newsletter: <a href="http://localhost:3000/api/v1/subscribe?email=${email}
+
+  await transporter.sendMail(mailOptions);
+  console.log(`Email sent to ${email}`);
+};
+const sendSubscribeEmail = async (email) => {
+//   console.log("in sendSubscribeEmail fn ===> ", email);
+  const mailOptions = {
+    from: process.env.gmail,
+    to: email,
+    subject: "Weekly Newsletter Subscription",
+    html: `<p>Subscribe to our newsletter: <a href="http://localhost:3000/api/v1/subscribe?email=${email}
         ">Subscribe</a></p>`,
-    };
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${email}`);
   };
-  
-  module.exports = {
-    sendNewsLetterEmail,
-    sendSubscribeEmail,
-  };
-  
+  await transporter.sendMail(mailOptions);
+  console.log(`Email sent to ${email}`);
+};
+
+module.exports = {
+  sendNewsLetterEmail,
+  sendSubscribeEmail,
+};

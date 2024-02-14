@@ -19,7 +19,10 @@ const verifySubscriptionMail = async (req, res) => {
 	}
 
 	// Log the email
-	await new EmailLog({ email }).save();
+	
+	const result = await EmailLog.findOne({ email });
+	// Create a new user and save to the database
+	if (!result) await new EmailLog({ email }).save();
 
 	res.send(
 		"Thank you, you have successfully subscribed to our weekly newsletter"
