@@ -1,12 +1,6 @@
 const mongoose = require("mongoose");
 
 const EmailLogSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please provide a name"],
-    minlength: 1,
-    maxlength: 50,
-  },
   email: {
     type: String,
     required: [true, "Please provide an email"],
